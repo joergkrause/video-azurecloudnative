@@ -2,16 +2,25 @@
   "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
   "contentVersion": "1.0.0.0",
   "parameters": {
-    "storageAccount_name": {
+    "location": {
+      "type": "string",
+      "defaultValue": "[resourceGroup().location]"
+    },
+    "storageAccountName": {
       "defaultValue": "stworkshopdev",
       "type": "string",
+      "minLength": 3,
+      "maxLength": 24,
       "metadata": {
         "description": "Name of the storage account"
       }
     },
     "storageAccount_sku": {
       "defaultValue": "Standard_LRS",
-      "type": "string",
+      "type": "array",      
+      "allowedValues": [
+        "Standard_LRS", "Standard_GRS"
+      ],
       "metadata": {
         "description": "Redundancy (hint: keep locally redundant (LRS))"
       }
@@ -48,13 +57,13 @@
   },
   "variables": {
     "v_location": "Germany West Central",
-    "v_location_short": "germanywestcentral"
+    "v_location_short": "[parameters('location')]"
   },
   "resources": [
     {
       "type": "Microsoft.Storage/storageAccounts",
       "apiVersion": "2021-06-01",
-      "name": "[parameters('storageAccount_name')]",
+      "name": "[parameters('storageAccountName')]",
       "location": "[variables('v_location_short')]",
       "tags": {
         "Purpose": "Demo"
@@ -96,9 +105,9 @@
     {
       "type": "Microsoft.Storage/storageAccounts/blobServices",
       "apiVersion": "2021-06-01",
-      "name": "[concat(parameters('storageAccount_name'), '/default')]",
+      "name": "[concat(parameters('storageAccountName'), '/default')]",
       "dependsOn": [
-        "[resourceId('Microsoft.Storage/storageAccounts', parameters('storageAccount_name'))]"
+        "[resourceId('Microsoft.Storage/storageAccounts', parameters('storageAccountName'))]"
       ],
       "sku": {
         "name": "Standard_LRS",
@@ -128,9 +137,9 @@
     {
       "type": "Microsoft.Storage/storageAccounts/queueServices",
       "apiVersion": "2021-06-01",
-      "name": "[concat(parameters('storageAccount_name'), '/default')]",
+      "name": "[concat(parameters('storageAccountName'), '/default')]",
       "dependsOn": [
-        "[resourceId('Microsoft.Storage/storageAccounts', parameters('storageAccount_name'))]"
+        "[resourceId('Microsoft.Storage/storageAccounts', parameters('storageAccountName'))]"
       ],
       "properties": {
         "cors": {
@@ -141,9 +150,9 @@
     {
       "type": "Microsoft.Storage/storageAccounts/tableServices",
       "apiVersion": "2021-06-01",
-      "name": "[concat(parameters('storageAccount_name'), '/default')]",
+      "name": "[concat(parameters('storageAccountName'), '/default')]",
       "dependsOn": [
-        "[resourceId('Microsoft.Storage/storageAccounts', parameters('storageAccount_name'))]"
+        "[resourceId('Microsoft.Storage/storageAccounts', parameters('storageAccountName'))]"
       ],
       "properties": {
         "cors": {
@@ -154,10 +163,10 @@
     {
       "type": "Microsoft.Storage/storageAccounts/blobServices/containers",
       "apiVersion": "2021-06-01",
-      "name": "[concat(parameters('storageAccount_name'), '/default/demo')]",
+      "name": "[concat(parameters('storageAccountName'), '/default/demo')]",
       "dependsOn": [
-        "[resourceId('Microsoft.Storage/storageAccounts/blobServices', parameters('storageAccount_name'), 'default')]",
-        "[resourceId('Microsoft.Storage/storageAccounts', parameters('storageAccount_name'))]"
+        "[resourceId('Microsoft.Storage/storageAccounts/blobServices', parameters('storageAccountName'), 'default')]",
+        "[resourceId('Microsoft.Storage/storageAccounts', parameters('storageAccountName'))]"
       ],
       "properties": {
         "immutableStorageWithVersioning": {
@@ -171,10 +180,10 @@
     {
       "type": "Microsoft.Storage/storageAccounts/queueServices/queues",
       "apiVersion": "2021-06-01",
-      "name": "[concat(parameters('storageAccount_name'), '/default/demo-workshop')]",
+      "name": "[concat(parameters('storageAccountName'), '/default/demo-workshop')]",
       "dependsOn": [
-        "[resourceId('Microsoft.Storage/storageAccounts/queueServices', parameters('storageAccount_name'), 'default')]",
-        "[resourceId('Microsoft.Storage/storageAccounts', parameters('storageAccount_name'))]"
+        "[resourceId('Microsoft.Storage/storageAccounts/queueServices', parameters('storageAccountName'), 'default')]",
+        "[resourceId('Microsoft.Storage/storageAccounts', parameters('storageAccountName'))]"
       ],
       "properties": {
         "metadata": {}
