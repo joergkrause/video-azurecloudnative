@@ -2,199 +2,209 @@
   "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
   "contentVersion": "1.0.0.0",
   "parameters": {
-      "storageAccounts_stworkshopdev_name": {
-          "defaultValue": "stworkshopdev",
-          "type": "string"
+    "storageAccount_name": {
+      "defaultValue": "stworkshopdev",
+      "type": "string",
+      "metadata": {
+        "description": "Name of the storage account"
       }
+    },
+    "storageAccount_sku": {
+      "defaultValue": "Standard_LRS",
+      "type": "string",
+      "metadata": {
+        "description": "Redundancy (hint: keep locally redundant (LRS))"
+      }
+    },
+    "storageAccount_tier": {
+      "defaultValue": "Standard",
+      "type": "string",
+      "metadata": {
+        "description": "Tier (default: Standard)"
+      }
+    },
+    "serverfarms_appplan_name": {
+      "defaultValue": "appplan-workshop-dev",
+      "type": "String",
+      "metadata": {
+        "description": "Name of the application plan (host for service and functions)"
+      }
+    },
+    "serverfarms_appplan_sku_name": {
+      "defaultValue": "B1",
+      "type": "String",
+      "metadata": {
+        "description": "SKU of the plan (recommendation: Basic B1)"
+      }
+    },
+    "sites_func_machinesimulator_name": {
+      "defaultValue": "func-machinesimulator-dev",
+      "type": "String"
+    },
+    "serverfarms_appplan_videocourse_dev_externalid": {
+      "defaultValue": "/subscriptions/5bbf037d-3d51-42fa-a383-b800966f2525/resourceGroups/rg-videocourse/providers/Microsoft.Web/serverfarms/appplan-videocourse-dev",
+      "type": "String"
+    }
   },
-  "variables": {},
+  "variables": {
+    "v_location": "Germany West Central",
+    "v_location_short": "germanywestcentral"
+  },
   "resources": [
-      {
-          "type": "Microsoft.Storage/storageAccounts",
-          "apiVersion": "2021-06-01",
-          "name": "[parameters('storageAccounts_stworkshopdev_name')]",
-          "location": "germanywestcentral",
-          "tags": {
-              "Purpose": "Demo"
+    {
+      "type": "Microsoft.Storage/storageAccounts",
+      "apiVersion": "2021-06-01",
+      "name": "[parameters('storageAccount_name')]",
+      "location": "[variables('v_location_short')]",
+      "tags": {
+        "Purpose": "Demo"
+      },
+      "sku": {
+        "name": "[parameters('storageAccount_sku')]",
+        "tier": "[parameters('storageAccount_tier')]"
+      },
+      "kind": "StorageV2",
+      "properties": {
+        "defaultToOAuthAuthentication": false,
+        "allowCrossTenantReplication": true,
+        "minimumTlsVersion": "TLS1_2",
+        "allowBlobPublicAccess": true,
+        "allowSharedKeyAccess": true,
+        "networkAcls": {
+          "bypass": "AzureServices",
+          "virtualNetworkRules": [],
+          "ipRules": [],
+          "defaultAction": "Allow"
+        },
+        "supportsHttpsTrafficOnly": true,
+        "encryption": {
+          "services": {
+            "file": {
+              "keyType": "Account",
+              "enabled": true
+            },
+            "blob": {
+              "keyType": "Account",
+              "enabled": true
+            }
           },
-          "sku": {
-              "name": "Standard_LRS",
-              "tier": "Standard"
-          },
-          "kind": "StorageV2",
-          "properties": {
-              "defaultToOAuthAuthentication": false,
-              "allowCrossTenantReplication": true,
-              "minimumTlsVersion": "TLS1_2",
-              "allowBlobPublicAccess": true,
-              "allowSharedKeyAccess": true,
-              "networkAcls": {
-                  "bypass": "AzureServices",
-                  "virtualNetworkRules": [],
-                  "ipRules": [],
-                  "defaultAction": "Allow"
-              },
-              "supportsHttpsTrafficOnly": true,
-              "encryption": {
-                  "services": {
-                      "file": {
-                          "keyType": "Account",
-                          "enabled": true
-                      },
-                      "blob": {
-                          "keyType": "Account",
-                          "enabled": true
-                      }
-                  },
-                  "keySource": "Microsoft.Storage"
-              },
-              "accessTier": "Hot"
-          }
-      },
-      {
-          "type": "Microsoft.Storage/storageAccounts/blobServices",
-          "apiVersion": "2021-06-01",
-          "name": "[concat(parameters('storageAccounts_stworkshopdev_name'), '/default')]",
-          "dependsOn": [
-              "[resourceId('Microsoft.Storage/storageAccounts', parameters('storageAccounts_stworkshopdev_name'))]"
-          ],
-          "sku": {
-              "name": "Standard_LRS",
-              "tier": "Standard"
-          },
-          "properties": {
-              "cors": {
-                  "corsRules": []
-              },
-              "deleteRetentionPolicy": {
-                  "enabled": true,
-                  "days": 7
-              },
-              "isVersioningEnabled": false,
-              "changeFeed": {
-                  "enabled": false
-              },
-              "restorePolicy": {
-                  "enabled": false
-              },
-              "containerDeleteRetentionPolicy": {
-                  "enabled": true,
-                  "days": 7
-              }
-          }
-      },
-      {
-          "type": "Microsoft.Storage/storageAccounts/fileServices",
-          "apiVersion": "2021-06-01",
-          "name": "[concat(parameters('storageAccounts_stworkshopdev_name'), '/default')]",
-          "dependsOn": [
-              "[resourceId('Microsoft.Storage/storageAccounts', parameters('storageAccounts_stworkshopdev_name'))]"
-          ],
-          "sku": {
-              "name": "Standard_LRS",
-              "tier": "Standard"
-          },
-          "properties": {
-              "protocolSettings": {
-                  "smb": {}
-              },
-              "cors": {
-                  "corsRules": []
-              },
-              "shareDeleteRetentionPolicy": {
-                  "enabled": true,
-                  "days": 7
-              }
-          }
-      },
-      {
-          "type": "Microsoft.Storage/storageAccounts/queueServices",
-          "apiVersion": "2021-06-01",
-          "name": "[concat(parameters('storageAccounts_stworkshopdev_name'), '/default')]",
-          "dependsOn": [
-              "[resourceId('Microsoft.Storage/storageAccounts', parameters('storageAccounts_stworkshopdev_name'))]"
-          ],
-          "properties": {
-              "cors": {
-                  "corsRules": []
-              }
-          }
-      },
-      {
-          "type": "Microsoft.Storage/storageAccounts/tableServices",
-          "apiVersion": "2021-06-01",
-          "name": "[concat(parameters('storageAccounts_stworkshopdev_name'), '/default')]",
-          "dependsOn": [
-              "[resourceId('Microsoft.Storage/storageAccounts', parameters('storageAccounts_stworkshopdev_name'))]"
-          ],
-          "properties": {
-              "cors": {
-                  "corsRules": []
-              }
-          }
-      },
-      {
-          "type": "Microsoft.Storage/storageAccounts/blobServices/containers",
-          "apiVersion": "2021-06-01",
-          "name": "[concat(parameters('storageAccounts_stworkshopdev_name'), '/default/azure-webjobs-hosts')]",
-          "dependsOn": [
-              "[resourceId('Microsoft.Storage/storageAccounts/blobServices', parameters('storageAccounts_stworkshopdev_name'), 'default')]",
-              "[resourceId('Microsoft.Storage/storageAccounts', parameters('storageAccounts_stworkshopdev_name'))]"
-          ],
-          "properties": {
-              "immutableStorageWithVersioning": {
-                  "enabled": false
-              },
-              "defaultEncryptionScope": "$account-encryption-key",
-              "denyEncryptionScopeOverride": false,
-              "publicAccess": "None"
-          }
-      },
-      {
-          "type": "Microsoft.Storage/storageAccounts/blobServices/containers",
-          "apiVersion": "2021-06-01",
-          "name": "[concat(parameters('storageAccounts_stworkshopdev_name'), '/default/azure-webjobs-secrets')]",
-          "dependsOn": [
-              "[resourceId('Microsoft.Storage/storageAccounts/blobServices', parameters('storageAccounts_stworkshopdev_name'), 'default')]",
-              "[resourceId('Microsoft.Storage/storageAccounts', parameters('storageAccounts_stworkshopdev_name'))]"
-          ],
-          "properties": {
-              "immutableStorageWithVersioning": {
-                  "enabled": false
-              },
-              "defaultEncryptionScope": "$account-encryption-key",
-              "denyEncryptionScopeOverride": false,
-              "publicAccess": "None"
-          }
-      },
-      {
-          "type": "Microsoft.Storage/storageAccounts/blobServices/containers",
-          "apiVersion": "2021-06-01",
-          "name": "[concat(parameters('storageAccounts_stworkshopdev_name'), '/default/demo')]",
-          "dependsOn": [
-              "[resourceId('Microsoft.Storage/storageAccounts/blobServices', parameters('storageAccounts_stworkshopdev_name'), 'default')]",
-              "[resourceId('Microsoft.Storage/storageAccounts', parameters('storageAccounts_stworkshopdev_name'))]"
-          ],
-          "properties": {
-              "immutableStorageWithVersioning": {
-                  "enabled": false
-              },
-              "defaultEncryptionScope": "$account-encryption-key",
-              "denyEncryptionScopeOverride": false,
-              "publicAccess": "None"
-          }
-      },
-      {
-          "type": "Microsoft.Storage/storageAccounts/queueServices/queues",
-          "apiVersion": "2021-06-01",
-          "name": "[concat(parameters('storageAccounts_stworkshopdev_name'), '/default/demo-workshop')]",
-          "dependsOn": [
-              "[resourceId('Microsoft.Storage/storageAccounts/queueServices', parameters('storageAccounts_stworkshopdev_name'), 'default')]",
-              "[resourceId('Microsoft.Storage/storageAccounts', parameters('storageAccounts_stworkshopdev_name'))]"
-          ],
-          "properties": {
-              "metadata": {}
-          }
+          "keySource": "Microsoft.Storage"
+        },
+        "accessTier": "Hot"
       }
+    },
+    {
+      "type": "Microsoft.Storage/storageAccounts/blobServices",
+      "apiVersion": "2021-06-01",
+      "name": "[concat(parameters('storageAccount_name'), '/default')]",
+      "dependsOn": [
+        "[resourceId('Microsoft.Storage/storageAccounts', parameters('storageAccount_name'))]"
+      ],
+      "sku": {
+        "name": "Standard_LRS",
+        "tier": "Standard"
+      },
+      "properties": {
+        "cors": {
+          "corsRules": []
+        },
+        "deleteRetentionPolicy": {
+          "enabled": true,
+          "days": 7
+        },
+        "isVersioningEnabled": false,
+        "changeFeed": {
+          "enabled": false
+        },
+        "restorePolicy": {
+          "enabled": false
+        },
+        "containerDeleteRetentionPolicy": {
+          "enabled": true,
+          "days": 7
+        }
+      }
+    },
+    {
+      "type": "Microsoft.Storage/storageAccounts/queueServices",
+      "apiVersion": "2021-06-01",
+      "name": "[concat(parameters('storageAccount_name'), '/default')]",
+      "dependsOn": [
+        "[resourceId('Microsoft.Storage/storageAccounts', parameters('storageAccount_name'))]"
+      ],
+      "properties": {
+        "cors": {
+          "corsRules": []
+        }
+      }
+    },
+    {
+      "type": "Microsoft.Storage/storageAccounts/tableServices",
+      "apiVersion": "2021-06-01",
+      "name": "[concat(parameters('storageAccount_name'), '/default')]",
+      "dependsOn": [
+        "[resourceId('Microsoft.Storage/storageAccounts', parameters('storageAccount_name'))]"
+      ],
+      "properties": {
+        "cors": {
+          "corsRules": []
+        }
+      }
+    },
+    {
+      "type": "Microsoft.Storage/storageAccounts/blobServices/containers",
+      "apiVersion": "2021-06-01",
+      "name": "[concat(parameters('storageAccount_name'), '/default/demo')]",
+      "dependsOn": [
+        "[resourceId('Microsoft.Storage/storageAccounts/blobServices', parameters('storageAccount_name'), 'default')]",
+        "[resourceId('Microsoft.Storage/storageAccounts', parameters('storageAccount_name'))]"
+      ],
+      "properties": {
+        "immutableStorageWithVersioning": {
+          "enabled": false
+        },
+        "defaultEncryptionScope": "$account-encryption-key",
+        "denyEncryptionScopeOverride": false,
+        "publicAccess": "None"
+      }
+    },
+    {
+      "type": "Microsoft.Storage/storageAccounts/queueServices/queues",
+      "apiVersion": "2021-06-01",
+      "name": "[concat(parameters('storageAccount_name'), '/default/demo-workshop')]",
+      "dependsOn": [
+        "[resourceId('Microsoft.Storage/storageAccounts/queueServices', parameters('storageAccount_name'), 'default')]",
+        "[resourceId('Microsoft.Storage/storageAccounts', parameters('storageAccount_name'))]"
+      ],
+      "properties": {
+        "metadata": {}
+      }
+    },
+    {
+      "type": "Microsoft.Web/serverfarms",
+      "apiVersion": "2021-02-01",
+      "name": "[parameters('serverfarms_appplan_name')]",
+      "location": "[variables('v_location')]",
+      "sku": {
+        "name": "[parameters('serverfarms_appplan_sku_name')]",
+        "tier": "Basic",
+        "size": "[parameters('serverfarms_appplan_sku_name')]",
+        "family": "B",
+        "capacity": 1
+      },
+      "kind": "app",
+      "properties": {
+        "perSiteScaling": false,
+        "elasticScaleEnabled": false,
+        "maximumElasticWorkerCount": 1,
+        "isSpot": false,
+        "reserved": false,
+        "isXenon": false,
+        "hyperV": false,
+        "targetWorkerCount": 0,
+        "targetWorkerSizeId": 0,
+        "zoneRedundant": false
+      }
+    }
   ]
 }
