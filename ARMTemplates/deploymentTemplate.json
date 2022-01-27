@@ -30,8 +30,7 @@
       }
     }
   },
-  "variables": {
-    "linked-template-storage": "https://raw.githubusercontent.com%2Fjoergkrause%2Fvideo-azurecloudnative%2Fmaster%2FARMTemplates%2Fstorage.json"
+  "variables": {    
   },
   "resources": [
     {
@@ -52,7 +51,7 @@
           }
         },
         "templateLink": {
-          "uri": "[variables('linked-template-storage')]",
+          "uri": "https://raw.githubusercontent.com%2Fjoergkrause%2Fvideo-azurecloudnative%2Fmaster%2FARMTemplates%2Fstorage.json",
           "contentVersion": "1.0.0.0"
         }
       }
