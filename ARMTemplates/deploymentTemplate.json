@@ -65,7 +65,7 @@
     "linked-template-storage": "https://raw.githubusercontent.com/joergkrause/video-azurecloudnative/master/ARMTemplates/storage.json",
     "linked-template-appplan": "https://raw.githubusercontent.com/joergkrause/video-azurecloudnative/master/ARMTemplates/appplan.json",
     "linked-template-funcapp": "https://raw.githubusercontent.com/joergkrause/video-azurecloudnative/master/ARMTemplates/functionapp.json",
-    "storageAccountName": "[concat('st', parameters('ShortProjectName'), substring(parameters('StageName'), 1))]",
+    "storageAccountName": "[concat('st', parameters('ShortProjectName'), substring(parameters('StageName'), 0, 1))]",
     "appPlanName": "[concat('appplan-', parameters('LongProjectName'), '-', parameters('StageName'))]",
     "funcAppMachineSimulatorName": "[concat('func-machinesimulator-', parameters('LongProjectName'), '-', parameters('StageName'))]"
   },
