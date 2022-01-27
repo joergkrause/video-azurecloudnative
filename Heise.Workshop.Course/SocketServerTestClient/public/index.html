@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width,initial-scale=1.0">
+  <link rel="icon" href="<%= BASE_URL %>favicon.ico">
+  <title>SocketServerTestClient</title>
+  <style>
+    textarea {
+      vertical-align: bottom;
+    }
+
+    #output {
+      overflow: auto;
+    }
+
+      #output > p {
+        overflow-wrap: break-word;
+      }
+
+      #output span {
+        color: blue;
+      }
+
+        #output span.error {
+          color: red;
+        }
+  </style>
+</head>
+<body>
+  <h2>WebSocket Test</h2>
+  <textarea cols=60 rows=6></textarea>
+  <button>send</button>
+  <div id=output></div>
+</body>
+
+</html>
+
+<script>
+    // ws.ifelse.io
+
+    var button = document.querySelector("button"),
+        output = document.querySelector("#output"),
+        textarea = document.querySelector("textarea"),
+        //wsUri = "ws://ws.ifelse.io",
+        wsUri = "ws://127.0.0.1:8080/Echo",
+        websocket = new WebSocket(wsUri);
+
+    button.addEventListener("click", onClickButton);
+
+    websocket.onopen = function (e) {
+        writeToScreen("CONNECTED");
+        doSend("WebSocket rocks");
+    };
+
+    websocket.onclose = function (e) {
+        writeToScreen("DISCONNECTED");
+    };
+
+    websocket.onmessage = function (e) {
+        writeToScreen("<span>RESPONSE: " + e.data + "</span>");
+    };
+
+    websocket.onerror = function (e) {
+        writeToScreen("<span class=error>ERROR:</span> " + e.data);
+    };
+
+    function doSend(message) {
+        writeToScreen("SENT: " + message);
+        websocket.send(message);
+    }
+
+    function writeToScreen(message) {
+        output.insertAdjacentHTML("afterbegin", "<p>" + message + "</p>");
+    }
+
+    function onClickButton() {
+        var text = textarea.value;
+
+        text && doSend(text);
+        textarea.value = "";
+        textarea.focus();
+    }
+</script>

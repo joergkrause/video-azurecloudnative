@@ -1,0 +1,64 @@
+{
+	"definitions": {},
+	"$schema": "http://json-schema.org/draft-07/schema#", 
+	"$id": "https://example.com/object1641647591.json", 
+	"title": "Root", 
+	"type": "object",
+	"required": [
+		"id",
+		"sequence",
+		"value",
+		"device",
+		"kind"
+	],
+	"properties": {
+		"id": {
+			"$id": "#root/id", 
+			"title": "Id", 
+			"type": "string",
+			"default": "",
+			"examples": [
+				"f53ba39e-96c7-4212-b2e3-42b51fa5472c"
+			],
+			"pattern": "^.*$"
+		},
+		"sequence": {
+			"$id": "#root/sequence", 
+			"title": "Sequence", 
+			"type": "integer",
+			"examples": [
+				1
+			],
+			"default": 0
+		},
+		"value": {
+			"$id": "#root/value", 
+			"title": "Value", 
+			"type": "number",
+			"examples": [
+				1.0094312862537016
+			],
+			"default": 0.0
+		},
+		"device": {
+			"$id": "#root/device", 
+			"title": "Device", 
+			"type": "string",
+			"default": "",
+			"examples": [
+				"Transport Belt"
+			],
+			"pattern": "^.*$"
+		},
+		"kind": {
+			"$id": "#root/kind", 
+			"title": "Kind", 
+			"type": "string",
+			"default": "",
+			"examples": [
+				"BeltSpeed"
+			],
+			"pattern": "^.*$"
+		}
+	}
+}

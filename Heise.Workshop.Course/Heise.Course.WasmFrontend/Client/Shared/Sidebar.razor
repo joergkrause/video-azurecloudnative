@@ -1,0 +1,71 @@
+﻿<aside class="main-sidebar sidebar-dark-primary elevation-4">
+	<a href="https://www.heise-academy.de/" target="_blank" class="brand-link">
+		<img src="img/logo_azure.svg" alt="Azure Kurs" class="brand-image img-circle elevation-3" style="opacity: .8" />
+		<span class="brand-text font-weight-light">Heise Azure Kurs</span>
+	</a>
+
+	<div class="sidebar">
+		<div class="user-panel mt-3 pb-3 mb-3 d-flex">
+			<div class="image">
+				<img src="img/JKrause_150x150.jpg" class="img-circle elevation-2" alt="User Image" />
+			</div>
+			<div class="info">
+				<a href="https://www.joergkrause.de" target="_blank" class="d-block">Autor: Jörg Krause</a>
+			</div>
+		</div>
+
+		<div class="form-inline">
+			<div class="input-group" data-widget="sidebar-search">
+				<input class="form-control form-control-sidebar" type="search" placeholder="Suche" aria-label="Suchen" />
+				<div class="input-group-append">
+					<button class="btn btn-sidebar">
+						<i class="fas fa-search fa-fw"></i>
+					</button>
+				</div>
+			</div>
+		</div>
+
+		<nav class="mt-2">
+			<ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
+				<li class="nav-item menu-open">
+				  <NavLink class="nav-link" href="home">
+						<i class="nav-icon fas fa-tachometer-alt"></i>
+						<p>Dashboard
+							<i class="right fas fa-angle-left"></i>
+						</p>
+					</NavLink>
+					<ul class="nav nav-treeview">
+						<li class="nav-item">
+							<NavLink class="nav-link" href="home">
+								<i class="far fa-line-chart nav-icon"></i> <p>Live Daten</p>
+								<span class="right badge badge-danger">New</span>
+							</NavLink>
+						</li>
+						<li class="nav-item">
+							<NavLink class="nav-link" href="data">
+								<i class="far fa-database nav-icon"></i> <p>Datenbank</p>
+							</NavLink>
+						</li>
+					</ul>
+				</li>
+				<li class="nav-item">
+					<NavLink class="nav-link" href="control">
+						<i class="far fa-thermometer nav-icon"></i> <p>Steuerung</p>
+					</NavLink>
+				</li>
+				<li class="nav-item">
+					<NavLink class="nav-link" href="messages">
+						<i class="fas fa-angle-left right"></i> <p>Nachrichten</p>
+						<span class="badge badge-info right">@MessageCounter</span>
+					</NavLink>
+				</li>
+			</ul>
+		</nav>
+	</div>
+</aside>
+
+@code {
+
+	public int MessageCounter { get; set; } = 6;
+
+}

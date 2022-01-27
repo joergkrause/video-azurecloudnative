@@ -1,0 +1,161 @@
+﻿@page "/data"
+@using Heise.Course.WasmFrontend.Client.ViewModels
+@using Heise.Course.WasmFrontend.Client.Shared.GridComponent
+@using Heise.Course.WasmFrontend.Client.Shared.UiComponents
+
+<div class="content-wrapper">
+  <div class="content-header">
+    <div class="container-fluid">
+      <div class="row mb-2">
+        <div class="col-sm-6">
+          <h1 class="m-0">Daten</h1>
+        </div>
+        <div class="col-sm-6">
+          <ol class="breadcrumb float-sm-right">
+            <li class="breadcrumb-item">
+              <NavLink href="/">Home</NavLink>
+            </li>
+            <li class="breadcrumb-item active">Daten</li>
+          </ol>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <section class="content">
+    <div class="container-fluid">
+
+      <div class="row">
+
+        <div class="col-md-8">
+
+        <div class="card">
+            <div class="card-header border-transparent">
+              <h3 class="card-title">Letzte Socketereignisse</h3>
+
+              <div class="card-tools">
+                <button type="button" class="btn btn-tool" @onclick="Collapse">
+                  <i class="fas fa-minus"></i>
+                </button>
+                <button type="button" class="btn btn-tool" @onclick="Remove">
+                  <i class="fas fa-times"></i>
+                </button>
+              </div>
+            </div>
+            <div class="card-body p-0">
+              <div class="table-responsive">
+                <table class="table m-0">
+                  <thead>
+                    <tr>
+                      <th>Status</th>
+                      <th>Markierung</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    @foreach (var state in Status) {
+                      <tr>
+                        <td>{state} </td>
+                        <td><EventStatus Status="@state"></EventStatus></td>
+                      </tr>
+                    }
+                  </tbody>
+                </table>
+              </div>
+            </div>
+            <div class="card-footer clearfix">
+              <a href="#" class="btn btn-sm btn-info float-left">Zur Steuerung</a>
+              <a href="#" class="btn btn-sm btn-secondary float-right" @onclick="Clear">Löschen</a>
+            </div>
+          </div>
+          <div class="card">
+            <div class="card-header border-transparent">
+              <h3 class="card-title">Wichtige Ereignisse</h3>
+
+              <div class="card-tools">
+                <button type="button" class="btn btn-tool" @onclick="Collapse">
+                  <i class="fas fa-minus"></i>
+                </button>
+                <button type="button" class="btn btn-tool" @onclick="Remove">
+                  <i class="fas fa-times"></i>
+                </button>
+              </div>
+            </div>
+            <div class="card-body p-0">
+
+              <div class="table-responsive">
+                <Grid Type="@MachineEventViewModel" Data="@DemoData">
+                  <StringTemplate>
+                    String: @(context as string)
+                  </StringTemplate>
+                </Grid>
+              </div>
+
+            </div>
+          </div>
+        </div>
+
+        <div class="col-md-4">
+          <div class="info-box mb-3 bg-warning">
+            <span class="info-box-icon"><i class="fas fa-tag"></i></span>
+
+            <div class="info-box-content">
+              <span class="info-box-text">Messwerte Temperatur @TempEvent?.Device</span>
+              <span class="info-box-number">@TempEvent.Value</span>
+            </div>
+          </div>
+          <div class="info-box mb-3 bg-success">
+            <span class="info-box-icon"><i class="far fa-heart"></i></span>
+
+            <div class="info-box-content">
+              <span class="info-box-text">Messwerte Druck @PressEvent?.Device</span>
+              <span class="info-box-number">@PressEvent.Value</span>
+            </div>
+          </div>
+          <div class="info-box mb-3 bg-danger">
+            <span class="info-box-icon"><i class="fas fa-cloud-download-alt"></i></span>
+
+            <div class="info-box-content">
+              <span class="info-box-text">Messwerte Geschwindigkeit @BeltEvent?.Device</span>
+              <span class="info-box-number">@BeltEvent.Value</span>
+            </div>
+          </div>
+          <div class="info-box mb-3 bg-info">
+            <span class="info-box-icon"><i class="far fa-comment"></i></span>
+
+            <div class="info-box-content">
+              <span class="info-box-text">Zustände</span>
+              <span class="info-box-number">@Status.Count()</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+</div>
+
+@code {
+
+  public IEnumerable<string> Status { get; set; } = new List<string>();
+
+  public MachineEventViewModel TempEvent { get; set; } = new MachineEventViewModel();
+  public MachineEventViewModel PressEvent { get; set; } = new MachineEventViewModel();
+  public MachineEventViewModel BeltEvent { get; set; } = new MachineEventViewModel();
+
+  public IEnumerable<MachineEventViewModel> DemoData { get; set; } = new List<MachineEventViewModel>
+              {
+      new MachineEventViewModel {  Device = "Demo", Kind = EventKind.Pressure, Value = 23.4F, Sequence = 1, Timestamp = DateTime.Now.ToShortTimeString() }
+  };
+
+  public void Clear() {
+
+  }
+
+  public void Collapse() {
+
+  }
+
+  public void Remove() {
+
+  }
+
+}

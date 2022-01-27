@@ -1,0 +1,25 @@
+﻿<div class="info-box">
+  <span class="info-box-icon @BackgroundClass elevation-1"><i class="fas @IconClass"></i></span>
+
+  <InfoboxContent InfoText="@InfoText" Value="@Value" Unit="@Unit"></InfoboxContent>
+
+</div>
+
+@code {
+
+  [Parameter]
+  public float Value { get; set; }
+
+  [Parameter]
+  public string InfoText { get; set; } = "";
+
+  [Parameter]
+  public string? IconClass { get; set; }
+
+  [Parameter]
+  public string? BackgroundClass { get; set; }
+
+  [Parameter]
+  public string? Unit { get; set; } = "";
+
+}

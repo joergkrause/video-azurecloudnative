@@ -1,0 +1,32 @@
+﻿<span class={color}>{label}</span>
+
+@code {
+
+  [Parameter]
+  public string Status { get; set; } = "";
+
+    public string Color { get; set; } = "#00a65a";
+
+    public string Label { get; set; } = "";
+
+  protected override void OnParametersSet()
+  {
+      if (Status.Contains("connected")) {
+        Label = "Verbunden";
+        Color = "badge badge-success";
+      }
+      if (Status.Contains("try connecting")) {
+        Label = "Verbindungsversuch";
+        Color = "badge badge-warning";
+      }
+      if (Status.Contains("close")) {
+        Label = "Geschlossen";
+        Color = "badge badge-danger";
+      }
+      if (Status.Contains("heartbeat")) {
+        Label = "Test";
+        Color = "badge badge-info";
+      }
+  }
+
+}

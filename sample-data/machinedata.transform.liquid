@@ -1,0 +1,12 @@
+{% assign currentDate = now | date: "yyyyMMddHHmmss" %}
+{
+  "ts": currentDate,
+  "id": "{{id}}",
+  "service": "{{name}}",
+  "value": "{{value}}",
+  {% case kind %}
+  {% when "temp" %} "unit": "°C"
+  {% when "speed" %} "unit": "m/s"
+  {% when "press" %} "unit": "hPa"
+  {% endcase %}
+}

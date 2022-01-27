@@ -1,0 +1,79 @@
+﻿@page "/"
+@page "/home"
+@using Heise.Course.WasmFrontend.Client.Pages.Actions
+@using Heise.Course.WasmFrontend.Client.Services
+@using System.Text.Json.Serialization
+@using System.Text.Json
+@using Heise.Course.WasmFrontend.Client.Services.Store
+@using Heise.Course.WasmFrontend.Client.ViewModels
+
+@inject StoreService Store
+
+<PageTitle>Home</PageTitle>
+
+<div class="content-wrapper">
+  <div class="content-header">
+    <div class="container-fluid">
+      <div class="row mb-2">
+        <div class="col-sm-6">
+          <h1 class="m-0">Live Dashboard</h1>
+        </div>
+        <div class="col-sm-6">
+          <ol class="breadcrumb float-sm-right">
+            <li class="breadcrumb-item"><NavLink href="/">Home</NavLink></li>
+            <li class="breadcrumb-item active">Live Dashboard</li>
+          </ol>
+        </div>
+      </div>
+    </div>
+  </div>
+  @Temperature
+  <section class="content">
+    <div class="container-fluid">
+      <div class="row">
+        <div class="col-12 col-sm-6 col-md-3">
+          <Infobox InfoText="Anzahl Maschinen" Value="@NumberOfMachines" BackgroundClass="bg-info" IconClass="fa-cog"></Infobox>
+        </div>
+
+        <div class="col-12 col-sm-6 col-md-3">
+          <Infobox InfoText="Temperatur 24h" Value="@Temperature" Unit="°C" BackgroundClass="bg-danger" IconClass="fa-thermometer"></Infobox>
+        </div>
+
+        <div class="clearfix hidden-md-up"></div>
+
+        <div class="col-12 col-sm-6 col-md-3">
+          <Infobox InfoText="Druck 24h" Value="@Pressure" Unit="hPa" BackgroundClass="bg-success" IconClass="fa-shopping-cart"></Infobox>
+        </div>
+
+        <div class="col-12 col-sm-6 col-md-3">
+          <Infobox InfoText="Geschwindigkeit" Value="@BeltSpeed" Unit="m/s" BackgroundClass="bg-warning" IconClass="fa-users"></Infobox>
+        </div>
+
+      </div>
+
+    </div>
+  </section>
+</div>
+
+@code {
+
+  protected override void OnInitialized() {
+    Store.OnChange += OnStoreChange;
+
+    Store.Dispatch(PageActions.NegotiateUrl());
+  }
+
+  private void OnStoreChange(IState state)
+  {
+    Temperature = state.GetValue<float>("Temperature");
+  }
+
+  public int NumberOfMachines { get; set; }
+
+  public float Temperature { get; set; }
+
+  public float Pressure { get; set; }
+
+  public float BeltSpeed { get; set; }
+
+}

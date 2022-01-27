@@ -1,0 +1,16 @@
+{
+  "name": "socket-server-test-client",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "start": "http-server ./public",
+    "build": "echo OK"
+  },
+  "description": "SocketServerTestClient",
+  "author": {
+    "name": ""
+  },
+  "devDependencies": {
+    "http-server":  "14.0.0"
+  }
+}

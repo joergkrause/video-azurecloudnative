@@ -1,0 +1,56 @@
+﻿@using Heise.Course.WasmFrontend.Client.Shared.GridComponent
+@using Heise.Course.WasmFrontend.Client.Shared.GridComponent.Models
+@inherits GridViewModel<Type>
+@typeparam Type 
+
+<table class="table table-striped">
+    <thead>
+        <tr>
+            @foreach (var head in Headers) {
+                <td title="@head.Description">
+                    @head.Name
+                    @if (head.IsSortable) {
+                        <div class="float-end">
+                            <button @onclick="@(e => Sort(SortDirection.Asc, head.PropertyName))">
+                                <i class="oi oi-arrow-up"></i>
+                            </button>
+                            <button @onclick="@(e => Sort(SortDirection.Desc, head.PropertyName))">
+                                <i class="oi oi-arrow-down"></i>
+                            </button>
+                        </div>
+                    }
+                </td>
+            }
+        </tr>
+    </thead>
+    <tbody>
+        @switch (Data) {
+            case var d when d == null:
+                <tr>
+                    <td colspan="@Headers.Count">
+                        <div class="alert alert-info">Daten werden geladen...</div>
+                    </td>
+                </tr>
+                break;
+            case var d when d != null && !d.Any():
+                <tr>
+                    <td colspan="@Headers.Count">
+                        <div class="alert alert-info">Keine Daten vorhanden.</div>
+                    </td>
+                </tr>
+                break;
+            default:
+                @foreach (var d in Data) {
+                    <tr>
+                        @foreach (var head in Headers) {
+                          <td>@Get(d, head.PropertyName)</td>
+                        }
+                    </tr>
+                }
+                break;
+        }
+
+        <tr>
+        </tr>
+    </tbody>
+</table>

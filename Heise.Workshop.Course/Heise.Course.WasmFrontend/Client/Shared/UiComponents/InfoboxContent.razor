@@ -1,0 +1,20 @@
+﻿<div class="info-box-content">
+  <span class="info-box-text">@InfoText</span>
+  <span class="info-box-number">
+    @Value<small> @Unit</small>
+  </span>
+</div>
+
+
+@code {
+
+  [Parameter]
+  public float Value { get; set; }
+
+  [Parameter]
+  public string InfoText { get; set; } = "";
+
+  [Parameter]
+  public string Unit { get; set; } = "";
+
+}
