@@ -106,6 +106,9 @@
           "location": {
             "value": "[variables('location')]"
           },
+          "storageid": {
+            "value": "[reference('linkedTemplateStorage').outputs.storageid.value]"
+          },
           "AppPlanName": {
             "value": "[variables('appPlanName')]"
           },

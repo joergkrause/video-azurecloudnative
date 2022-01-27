@@ -5,6 +5,9 @@
     "location": {
       "type": "string"
     },
+    "storageid": {
+      "type": "string"
+    },
     "AppPlanName": {
       "type": "string"
     },
@@ -15,7 +18,7 @@
   "variables": {
     "v_location": "Germany West Central",
     "v_location_short": "[parameters('location')]",
-    "v_storageid": "[reference('linkedTemplateStorage').outputs.storageid.value]"
+    "v_storageid": "[parameters('storageid')]"
   },
   "resources": [
   {

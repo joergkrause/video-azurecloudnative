@@ -147,32 +147,6 @@
       "properties": {
         "metadata": {}
       }
-    },
-    {
-      "type": "Microsoft.Web/serverfarms",
-      "apiVersion": "2021-02-01",
-      "name": "[parameters('AppPlanName')]",
-      "location": "[variables('v_location')]",
-      "sku": {
-        "name": "[parameters('AppPlanSku')]",
-        "tier": "Basic",
-        "size": "[parameters('AppPlanSku')]",
-        "family": "B",
-        "capacity": 1
-      },
-      "kind": "app",
-      "properties": {
-        "perSiteScaling": false,
-        "elasticScaleEnabled": false,
-        "maximumElasticWorkerCount": 1,
-        "isSpot": false,
-        "reserved": false,
-        "isXenon": false,
-        "hyperV": false,
-        "targetWorkerCount": 0,
-        "targetWorkerSizeId": 0,
-        "zoneRedundant": false
-      }
     }
   ],
   "outputs": {
