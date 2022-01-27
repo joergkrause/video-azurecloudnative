@@ -13,9 +13,10 @@
     },
     "storageAccountSku": {
       "defaultValue": "Standard_LRS",
-      "type": "array",      
-      "allowedValues": [
-        "Standard_LRS", "Standard_GRS"
+      "type": "array",
+      "value": [
+        "Standard_LRS",
+        "Standard_GRS"
       ],
       "metadata": {
         "description": "Redundancy (hint: keep locally redundant (LRS))"
@@ -47,6 +48,11 @@
       "type": "String"
     }
   },
+  "variables": {
+    "linked-template-storage": "https://raw.githubusercontent.com%2Fjoergkrause%2Fvideo-azurecloudnative%2Fmaster%2FARMTemplates%2Fstorage.json",
+    "linked-template-appplan": "https://raw.githubusercontent.com%2Fjoergkrause%2Fvideo-azurecloudnative%2Fmaster%2FARMTemplates%2Fappplan.json",
+    "linked-template-functionapp": "https://raw.githubusercontent.com%2Fjoergkrause%2Fvideo-azurecloudnative%2Fmaster%2FARMTemplates%2Ffunctionapp.json"
+  },
   "resources": [
     {
       "type": "Microsoft.Resources/deployments",
@@ -54,8 +60,56 @@
       "name": "linkedTemplate",
       "properties": {
         "mode": "Incremental",
+        "parameters": {
+          "storageAccountName": {
+            "value": "[parameters('storageAccountName')]"
+          },
+          "storageAccountSku": {
+            "value": "[parameters('storageAccountSku')]"
+          },
+          "storageAccountTier": {
+            "value": "[parameters('storageAccountTier')]"
+          }
+        },
         "templateLink": {
-          "uri": "https://raw.githubusercontent.com%2Fjoergkrause%2Fvideo-azurecloudnative%2Fmaster%2FARMTemplates%2Fstorage.json",
+          "uri": "[variables('linked-template-storage')]",
+          "contentVersion": "1.0.0.0"
+        }
+      }
+    },
+    {
+      "type": "Microsoft.Resources/deployments",
+      "apiVersion": "2021-04-01",
+      "name": "linkedTemplate",
+      "properties": {
+        "mode": "Incremental",
+        "parameters": {
+          "AppPlanName": {
+            "value": "[parameters('AppPlanName')]"
+          },
+          "AppPlanSku": {
+            "value": "[parameters('AppPlanSku')]"
+          }
+        },
+        "templateLink": {
+          "uri": "[variables('linked-template-appplan')]",
+          "contentVersion": "1.0.0.0"
+        }
+      }
+    },
+    {
+      "type": "Microsoft.Resources/deployments",
+      "apiVersion": "2021-04-01",
+      "name": "linkedTemplate",
+      "properties": {
+        "mode": "Incremental",
+        "parameters": {
+          "FunctionMachinesimulatorName": {
+            "value": "[parameters('FunctionMachinesimulatorName')]"
+          }
+        },
+        "templateLink": {
+          "uri": "[variables('linked-template-functionapp')]",
           "contentVersion": "1.0.0.0"
         }
       }

@@ -1,0 +1,46 @@
+{
+  "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+  },
+  "variables": {
+    "v_location": "Germany West Central",
+    "v_location_short": "[parameters('location')]",
+    "v_storageid": "[reference('storageTemplate').outputs.storageid.value]"
+  },
+  "resources": [
+  {
+      "type": "Microsoft.Web/serverfarms",
+      "apiVersion": "2021-02-01",
+      "name": "[parameters('AppPlanName')]",
+      "location": "[variables('v_location')]",
+      "sku": {
+        "name": "[parameters('AppPlanSku')]",
+        "tier": "Basic",
+        "size": "[parameters('AppPlanSku')]",
+        "family": "B",
+        "capacity": 1
+      },
+      "storage": "[variables('v_storageid')]",
+      "kind": "app",
+      "properties": {
+        "perSiteScaling": false,
+        "elasticScaleEnabled": false,
+        "maximumElasticWorkerCount": 1,
+        "isSpot": false,
+        "reserved": false,
+        "isXenon": false,
+        "hyperV": false,
+        "targetWorkerCount": 0,
+        "targetWorkerSizeId": 0,
+        "zoneRedundant": false
+      }
+    }
+  ],
+  "outputs": {
+    "appplanid": {
+      "type": "string",
+      "value": "[references('Microsoft.Web/serverfarms').id"
+    }
+  }
+}

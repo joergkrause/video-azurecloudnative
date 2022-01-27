@@ -1,0 +1,51 @@
+{
+  "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentParameters.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+    "storageAccountName": {
+      "defaultValue": "stworkshopdev",
+      "type": "string",
+      "minLength": 3,
+      "maxLength": 24,
+      "metadata": {
+        "description": "Name of the storage account"
+      }
+    },
+    "storageAccountSku": {
+      "defaultValue": "Standard_LRS",
+      "type": "array",
+      "value": [
+        "Standard_LRS",
+        "Standard_GRS"
+      ],
+      "metadata": {
+        "description": "Redundancy (hint: keep locally redundant (LRS))"
+      }
+    },
+    "storageAccountTier": {
+      "defaultValue": "Standard",
+      "type": "string",
+      "metadata": {
+        "description": "Tier (default: Standard)"
+      }
+    },
+    "AppPlanName": {
+      "defaultValue": "appplan-workshop-dev",
+      "type": "String",
+      "metadata": {
+        "description": "Name of the application plan (host for service and functions)"
+      }
+    },
+    "AppPlanSku": {
+      "defaultValue": "B1",
+      "type": "String",
+      "metadata": {
+        "description": "SKU of the plan (recommendation: Basic B1)"
+      }
+    },
+    "FunctionMachinesimulatorName": {
+      "defaultValue": "func-machinesimulator-dev",
+      "type": "String"
+    }
+  }
+}
