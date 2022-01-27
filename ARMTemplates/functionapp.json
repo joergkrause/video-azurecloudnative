@@ -5,6 +5,9 @@
     "location": {
       "type": "String"
     },
+    "appplanid": {
+      "type": "String"
+    },
     "FuncAppMachinesimulatorName": {
       "type": "String"
     }
@@ -31,7 +34,7 @@
             "hostType": "Repository"
           }
         ],
-        "serverFarmId": "[reference('linkedTemplateAppPlan').outputs.appplanid.value]",
+        "serverFarmId": "[parameters('appplanid')]",
         "reserved": true,
         "isXenon": false,
         "hyperV": false,
