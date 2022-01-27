@@ -2,17 +2,19 @@
   "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
   "contentVersion": "1.0.0.0",
   "parameters": {
+    "location": {
+      "type": "string"
+    }
   },
   "variables": {
-    "v_location": "Germany West Central",
-    "v_location_short": "[parameters('location')]"
+    "v_location": "Germany West Central"
   },
   "resources": [
     {
       "type": "Microsoft.Storage/storageAccounts",
       "apiVersion": "2021-06-01",
       "name": "[parameters('storageAccountName')]",
-      "location": "[variables('v_location_short')]",
+      "location": "[parameters('location')]",
       "tags": {
         "Purpose": "Demo"
       },

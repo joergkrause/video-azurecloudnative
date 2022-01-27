@@ -6,7 +6,7 @@
   "variables": {
     "v_location": "Germany West Central",
     "v_location_short": "[parameters('location')]",
-    "v_storageid": "[reference('storageTemplate').outputs.storageid.value]"
+    "v_storageid": "[reference('linkedTemplateStorage').outputs.storageid.value]"
   },
   "resources": [
   {

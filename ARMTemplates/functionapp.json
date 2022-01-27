@@ -29,7 +29,7 @@
                       "hostType": "Repository"
                   }
               ],
-              "serverFarmId": "[reference('appplantemplate').outputs.appplanid.value]",
+              "serverFarmId": "[reference('linkedTemplateAppPlan').outputs.appplanid.value]",
               "reserved": true,
               "isXenon": false,
               "hyperV": false,
