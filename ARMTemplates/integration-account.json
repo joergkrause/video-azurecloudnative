@@ -1,0 +1,48 @@
+{
+  "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+      "integrationAccounts_iacc_workshop_dev_name": {
+          "defaultValue": "iacc-workshop-dev",
+          "type": "String"
+      }
+  },
+  "variables": {},
+  "resources": [
+      {
+          "type": "Microsoft.Logic/integrationAccounts",
+          "apiVersion": "2016-06-01",
+          "name": "[parameters('integrationAccounts_iacc_workshop_dev_name')]",
+          "location": "germanywestcentral",
+          "tags": {
+              "Scope": "Development"
+          },
+          "sku": {
+              "name": "Free"
+          },
+          "properties": {
+              "state": "Enabled"
+          }
+      },
+      {
+          "type": "Microsoft.Logic/integrationAccounts/maps",
+          "apiVersion": "2016-06-01",
+          "name": "[concat(parameters('integrationAccounts_iacc_workshop_dev_name'), '/mapping')]",
+          "dependsOn": [
+              "[resourceId('Microsoft.Logic/integrationAccounts', parameters('integrationAccounts_iacc_workshop_dev_name'))]"
+          ],
+          "properties": {
+              "mapType": "Liquid",
+              "contentLink": {
+                  "uri": "https://prod-25.germanywestcentral.logic.azure.com:443/integrationAccounts/f4a83d07eaca4243bafef5c65850c317/maps/mapping/contents/Value?api-version=2015-08-01-preview&se=2022-01-28T02%3A41%3A49.6886161Z&sp=%2Fmaps%2Fmapping%2Fread&sv=1.0&sig=LW3DiUhi-8rScta8f6VGQZBJUmcxRPKtPIhc4AzbZGo",
+                  "contentVersion": "\"0x8D9D2B0ADE2B3FC\"",
+                  "contentSize": 296,
+                  "contentHash": {
+                      "algorithm": "md5",
+                      "value": "a2pIu3r5vg//laAckE8mmg=="
+                  }
+              }
+          }
+      }
+  ]
+}

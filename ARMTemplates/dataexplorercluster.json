@@ -1,0 +1,47 @@
+{
+  "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+      "ClusterName": {
+          "type": "String"
+      }
+  },
+  "variables": {},
+  "resources": [
+      {
+          "type": "Microsoft.Kusto/Clusters",
+          "apiVersion": "2021-08-27",
+          "name": "[parameters('ClusterName')]",
+          "location": "Germany West Central",
+          "tags": {
+              "Scope": "Development"
+          },
+          "sku": {
+              "name": "Dev(No SLA)_Standard_D11_v2",
+              "tier": "Basic",
+              "capacity": 1
+          },
+          "identity": {
+              "type": "SystemAssigned"
+          },
+          "properties": {
+              "trustedExternalTenants": [
+                  {
+                      "value": "*"
+                  }
+              ],
+              "enableDiskEncryption": false,
+              "enableStreamingIngest": false,
+              "enablePurge": false,
+              "enableDoubleEncryption": false,
+              "engineType": "V3",
+              "acceptedAudiences": [],
+              "restrictOutboundNetworkAccess": "Disabled",
+              "allowedFqdnList": [],
+              "publicNetworkAccess": "Enabled",
+              "allowedIpRangeList": [],
+              "enableAutoStop": true
+          }
+      }
+  ]
+}

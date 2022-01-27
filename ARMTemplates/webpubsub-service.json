@@ -1,0 +1,68 @@
+{
+  "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+      "WebPubSubName": {
+          "type": "String"
+      }
+  },
+  "variables": {},
+  "resources": [
+      {
+          "type": "Microsoft.SignalRService/WebPubSub",
+          "apiVersion": "2021-10-01",
+          "name": "[parameters('WebPubSubName')]",
+          "location": "westeurope",
+          "tags": {
+              "Scope": "Development"
+          },
+          "sku": {
+              "name": "Free_F1",
+              "tier": "Free",
+              "size": "F1",
+              "capacity": 1
+          },
+          "properties": {
+              "tls": {
+                  "clientCertEnabled": false
+              },
+              "networkACLs": {
+                  "defaultAction": "Deny",
+                  "publicNetwork": {
+                      "allow": [
+                          "ServerConnection",
+                          "ClientConnection",
+                          "RESTAPI",
+                          "Trace"
+                      ]
+                  },
+                  "privateEndpoints": []
+              },
+              "publicNetworkAccess": "Enabled",
+              "disableLocalAuth": false,
+              "disableAadAuth": false
+          }
+      },
+      {
+          "type": "Microsoft.SignalRService/WebPubSub/hubs",
+          "apiVersion": "2021-10-01",
+          "name": "[concat(parameters('WebPubSubName'), '/machine')]",
+          "dependsOn": [
+              "[resourceId('Microsoft.SignalRService/WebPubSub', parameters('WebPubSubName'))]"
+          ],
+          "properties": {
+              "eventHandlers": [
+                  {
+                      "urlTemplate": "https://func-workshop-dev.azurewebsites.net/runtime/webhooks/webpubsub?code=MPEH7na7OM6a5h8Fj0cOJay9SB9IL2RXMwAPeMEEnKIPxQWHrvXDQw==",
+                      "userEventPattern": "*",
+                      "auth": {
+                          "type": "None",
+                          "managedIdentity": {}
+                      }
+                  }
+              ],
+              "anonymousConnectPolicy": "deny"
+          }
+      }
+  ]
+}
