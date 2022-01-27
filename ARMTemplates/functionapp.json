@@ -2,8 +2,7 @@
   "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
   "contentVersion": "1.0.0.0",
   "parameters": {
-      "FuncMachinesimulatorName": {
-          "defaultValue": "func-machinesimulator-dev",
+      "FuncAppMachinesimulatorName": {
           "type": "String"
       }
   },
@@ -12,19 +11,19 @@
       {
           "type": "Microsoft.Web/sites",
           "apiVersion": "2021-02-01",
-          "name": "[parameters('FuncMachinesimulatorName')]",
+          "name": "[parameters('FuncAppMachinesimulatorName')]",
           "location": "Germany West Central",
           "kind": "functionapp,linux",
           "properties": {
               "enabled": true,
               "hostNameSslStates": [
                   {
-                      "name": "[concat(parameters('FuncMachinesimulatorName'), '.azurewebsites.net')]",
+                      "name": "[concat(parameters('FuncAppMachinesimulatorName'), '.azurewebsites.net')]",
                       "sslState": "Disabled",
                       "hostType": "Standard"
                   },
                   {
-                      "name": "[concat(parameters('FuncMachinesimulatorName'), '.scm.azurewebsites.net')]",
+                      "name": "[concat(parameters('FuncAppMachinesimulatorName'), '.scm.azurewebsites.net')]",
                       "sslState": "Disabled",
                       "hostType": "Repository"
                   }
@@ -47,7 +46,6 @@
               "clientCertEnabled": false,
               "clientCertMode": "Required",
               "hostNamesDisabled": false,
-              "customDomainVerificationId": "0FF03DDEEEFAC9EA12F0F35780F188C70C92182704716E5DDD8CEE1700C4C99B",
               "containerSize": 1536,
               "dailyMemoryTimeQuota": 0,
               "httpsOnly": false,
@@ -59,10 +57,10 @@
       {
           "type": "Microsoft.Web/sites/basicPublishingCredentialsPolicies",
           "apiVersion": "2021-02-01",
-          "name": "[concat(parameters('FuncMachinesimulatorName'), '/ftp')]",
+          "name": "[concat(parameters('FuncAppMachinesimulatorName'), '/ftp')]",
           "location": "Germany West Central",
           "dependsOn": [
-              "[resourceId('Microsoft.Web/sites', parameters('FuncMachinesimulatorName'))]"
+              "[resourceId('Microsoft.Web/sites', parameters('FuncAppMachinesimulatorName'))]"
           ],
           "properties": {
               "allow": true
@@ -71,10 +69,10 @@
       {
           "type": "Microsoft.Web/sites/basicPublishingCredentialsPolicies",
           "apiVersion": "2021-02-01",
-          "name": "[concat(parameters('FuncMachinesimulatorName'), '/scm')]",
+          "name": "[concat(parameters('FuncAppMachinesimulatorName'), '/scm')]",
           "location": "Germany West Central",
           "dependsOn": [
-              "[resourceId('Microsoft.Web/sites', parameters('FuncMachinesimulatorName'))]"
+              "[resourceId('Microsoft.Web/sites', parameters('FuncAppMachinesimulatorName'))]"
           ],
           "properties": {
               "allow": true
@@ -83,28 +81,21 @@
       {
           "type": "Microsoft.Web/sites/config",
           "apiVersion": "2021-02-01",
-          "name": "[concat(parameters('FuncMachinesimulatorName'), '/web')]",
+          "name": "[concat(parameters('FuncAppMachinesimulatorName'), '/web')]",
           "location": "Germany West Central",
           "dependsOn": [
-              "[resourceId('Microsoft.Web/sites', parameters('FuncMachinesimulatorName'))]"
+              "[resourceId('Microsoft.Web/sites', parameters('FuncAppMachinesimulatorName'))]"
           ],
           "properties": {
               "numberOfWorkers": 1,
               "defaultDocuments": [
-                  "Default.htm",
-                  "Default.html",
-                  "Default.asp",
-                  "index.htm",
-                  "index.html",
-                  "iisstart.htm",
-                  "default.aspx",
-                  "index.php"
+                  "index.html"
               ],
               "netFrameworkVersion": "v4.0",
               "linuxFxVersion": "DOTNET|3.1",
               "requestTracingEnabled": false,
               "remoteDebuggingEnabled": false,
-              "remoteDebuggingVersion": "VS2019",
+              "remoteDebuggingVersion": "VS2022",
               "httpLoggingEnabled": false,
               "acrUseManagedIdentityCreds": false,
               "logsDirectorySizeLimit": 35,
@@ -163,10 +154,10 @@
       {
           "type": "Microsoft.Web/sites/deployments",
           "apiVersion": "2021-02-01",
-          "name": "[concat(parameters('FuncMachinesimulatorName'), '/6a3070d59579479db12f8c31b3e8ee7b')]",
+          "name": "[concat(parameters('FuncAppMachinesimulatorName'), '/6a3070d59579479db12f8c31b3e8ee7b')]",
           "location": "Germany West Central",
           "dependsOn": [
-              "[resourceId('Microsoft.Web/sites', parameters('FuncMachinesimulatorName'))]"
+              "[resourceId('Microsoft.Web/sites', parameters('FuncAppMachinesimulatorName'))]"
           ],
           "properties": {
               "status": 4,
@@ -182,17 +173,12 @@
       {
           "type": "Microsoft.Web/sites/functions",
           "apiVersion": "2021-02-01",
-          "name": "[concat(parameters('FuncMachinesimulatorName'), '/MachineSimulatorData')]",
+          "name": "[concat(parameters('FuncAppMachinesimulatorName'), '/MachineSimulatorData')]",
           "location": "Germany West Central",
           "dependsOn": [
-              "[resourceId('Microsoft.Web/sites', parameters('FuncMachinesimulatorName'))]"
+              "[resourceId('Microsoft.Web/sites', parameters('FuncAppMachinesimulatorName'))]"
           ],
           "properties": {
-              "script_root_path_href": "https://func-machinesimulator-dev.azurewebsites.net/admin/vfs/home/site/wwwroot/MachineSimulatorData/",
-              "script_href": "https://func-machinesimulator-dev.azurewebsites.net/admin/vfs/home/site/wwwroot/bin/Heise.Workshop.Course.Simulator.dll",
-              "config_href": "https://func-machinesimulator-dev.azurewebsites.net/admin/vfs/home/site/wwwroot/MachineSimulatorData/function.json",
-              "test_data_href": "https://func-machinesimulator-dev.azurewebsites.net/admin/vfs/home/data/Functions/sampledata/MachineSimulatorData.dat",
-              "href": "https://func-machinesimulator-dev.azurewebsites.net/admin/functions/MachineSimulatorData",
               "config": {},
               "language": "DotNetAssembly",
               "isDisabled": false
@@ -201,13 +187,13 @@
       {
           "type": "Microsoft.Web/sites/hostNameBindings",
           "apiVersion": "2021-02-01",
-          "name": "[concat(parameters('FuncMachinesimulatorName'), '/', parameters('FuncMachinesimulatorName'), '.azurewebsites.net')]",
+          "name": "[concat(parameters('FuncAppMachinesimulatorName'), '/', parameters('FuncAppMachinesimulatorName'), '.azurewebsites.net')]",
           "location": "Germany West Central",
           "dependsOn": [
-              "[resourceId('Microsoft.Web/sites', parameters('FuncMachinesimulatorName'))]"
+              "[resourceId('Microsoft.Web/sites', parameters('FuncAppMachinesimulatorName'))]"
           ],
           "properties": {
-              "siteName": "func-machinesimulator-dev",
+              "siteName": "[parameters('FuncAppMachinesimulatorName')]",
               "hostNameType": "Verified"
           }
       }

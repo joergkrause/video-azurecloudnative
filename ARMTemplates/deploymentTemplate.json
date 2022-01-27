@@ -61,9 +61,9 @@
   },
   "variables": {
     "location": "germanywesrtcentral",
-    "linked-template-storage": "https://raw.githubusercontent.com%2Fjoergkrause%2Fvideo-azurecloudnative%2Fmaster%2FARMTemplates%2Fstorage.json",
-    "linked-template-appplan": "https://raw.githubusercontent.com%2Fjoergkrause%2Fvideo-azurecloudnative%2Fmaster%2FARMTemplates%2Fappplan.json",
-    "linked-template-funcapp": "https://raw.githubusercontent.com%2Fjoergkrause%2Fvideo-azurecloudnative%2Fmaster%2FARMTemplates%2Ffunctionapp.json",
+    "linked-template-storage": "https://raw.githubusercontent.com/joergkrause%/video-azurecloudnative/master/ARMTemplates/storage.json",
+    "linked-template-appplan": "https://raw.githubusercontent.com/joergkrause%/video-azurecloudnative/master/ARMTemplates/appplan.json",
+    "linked-template-funcapp": "https://raw.githubusercontent.com/joergkrause%/video-azurecloudnative/master/ARMTemplates/functionapp.json",
     "storageAccountName": "[concat('st', parameters('ShortProjectName'), substring(parameters('StageName'), 1))]",
     "appPlanName": "[concat('appplan-', parameters('LongProjectName'), '-', parameters('StageName'))]",
     "funcAppMachineSimulatorName": "[concat('func-machinesimulator-', parameters('LongProjectName'), '-', parameters('StageName'))]"
@@ -122,7 +122,7 @@
       "properties": {
         "mode": "Incremental",
         "parameters": {
-          "FunctionMachinesimulatorName": {
+          "FuncAppMachinesimulatorName": {
             "value": "[variables('funcAppMachineSimulatorName')]"
           }
         },

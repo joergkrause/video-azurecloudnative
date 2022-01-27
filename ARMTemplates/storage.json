@@ -4,6 +4,15 @@
   "parameters": {
     "location": {
       "type": "string"
+    },
+    "storageAccountName": {
+      "type": "string"
+    },
+    "storageAccountSku": {
+      "type": "string"
+    },
+    "storageAccountTier": {
+      "type": "string"
     }
   },
   "variables": {

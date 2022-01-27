@@ -2,6 +2,15 @@
   "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
   "contentVersion": "1.0.0.0",
   "parameters": {
+    "location": {
+      "type": "string"
+    },
+    "AppPlanName": {
+      "type": "string"
+    },
+    "AppPlanSku": {
+      "type": "string"
+    }
   },
   "variables": {
     "v_location": "Germany West Central",
