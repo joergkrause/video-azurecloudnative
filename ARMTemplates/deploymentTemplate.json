@@ -60,7 +60,8 @@
     }
   },
   "variables": {
-    "location": "germanywesrtcentral",
+    "location": "germanywestcentral",
+    "location_long": "Germany West Central",
     "linked-template-storage": "https://raw.githubusercontent.com/joergkrause/video-azurecloudnative/master/ARMTemplates/storage.json",
     "linked-template-appplan": "https://raw.githubusercontent.com/joergkrause/video-azurecloudnative/master/ARMTemplates/appplan.json",
     "linked-template-funcapp": "https://raw.githubusercontent.com/joergkrause/video-azurecloudnative/master/ARMTemplates/functionapp.json",
@@ -102,6 +103,9 @@
       "properties": {
         "mode": "Incremental",
         "parameters": {
+          "location": {
+            "value": "[variables('location')]"
+          },
           "AppPlanName": {
             "value": "[variables('appPlanName')]"
           },
@@ -122,6 +126,9 @@
       "properties": {
         "mode": "Incremental",
         "parameters": {
+          "location": {
+            "value": "[variables('location_long')]"
+          },
           "FuncAppMachinesimulatorName": {
             "value": "[variables('funcAppMachineSimulatorName')]"
           }

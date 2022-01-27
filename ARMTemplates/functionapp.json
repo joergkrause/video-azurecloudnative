@@ -2,200 +2,203 @@
   "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
   "contentVersion": "1.0.0.0",
   "parameters": {
-      "FuncAppMachinesimulatorName": {
-          "type": "String"
-      }
+    "location": {
+      "value": "[variables('location')]"
+    },
+    "FuncAppMachinesimulatorName": {
+      "type": "String"
+    }
   },
   "variables": {},
   "resources": [
-      {
-          "type": "Microsoft.Web/sites",
-          "apiVersion": "2021-02-01",
-          "name": "[parameters('FuncAppMachinesimulatorName')]",
-          "location": "Germany West Central",
-          "kind": "functionapp,linux",
-          "properties": {
-              "enabled": true,
-              "hostNameSslStates": [
-                  {
-                      "name": "[concat(parameters('FuncAppMachinesimulatorName'), '.azurewebsites.net')]",
-                      "sslState": "Disabled",
-                      "hostType": "Standard"
-                  },
-                  {
-                      "name": "[concat(parameters('FuncAppMachinesimulatorName'), '.scm.azurewebsites.net')]",
-                      "sslState": "Disabled",
-                      "hostType": "Repository"
-                  }
-              ],
-              "serverFarmId": "[reference('linkedTemplateAppPlan').outputs.appplanid.value]",
-              "reserved": true,
-              "isXenon": false,
-              "hyperV": false,
-              "siteConfig": {
-                  "numberOfWorkers": 1,
-                  "linuxFxVersion": "DOTNET|3.1",
-                  "acrUseManagedIdentityCreds": false,
-                  "alwaysOn": false,
-                  "http20Enabled": false,
-                  "functionAppScaleLimit": 0,
-                  "minimumElasticInstanceCount": 1
-              },
-              "scmSiteAlsoStopped": false,
-              "clientAffinityEnabled": false,
-              "clientCertEnabled": false,
-              "clientCertMode": "Required",
-              "hostNamesDisabled": false,
-              "containerSize": 1536,
-              "dailyMemoryTimeQuota": 0,
-              "httpsOnly": false,
-              "redundancyMode": "None",
-              "storageAccountRequired": false,
-              "keyVaultReferenceIdentity": "SystemAssigned"
+    {
+      "type": "Microsoft.Web/sites",
+      "apiVersion": "2021-02-01",
+      "name": "[parameters('FuncAppMachinesimulatorName')]",
+      "location": "[parameters('location')]",
+      "kind": "functionapp,linux",
+      "properties": {
+        "enabled": true,
+        "hostNameSslStates": [
+          {
+            "name": "[concat(parameters('FuncAppMachinesimulatorName'), '.azurewebsites.net')]",
+            "sslState": "Disabled",
+            "hostType": "Standard"
+          },
+          {
+            "name": "[concat(parameters('FuncAppMachinesimulatorName'), '.scm.azurewebsites.net')]",
+            "sslState": "Disabled",
+            "hostType": "Repository"
           }
-      },
-      {
-          "type": "Microsoft.Web/sites/basicPublishingCredentialsPolicies",
-          "apiVersion": "2021-02-01",
-          "name": "[concat(parameters('FuncAppMachinesimulatorName'), '/ftp')]",
-          "location": "Germany West Central",
-          "dependsOn": [
-              "[resourceId('Microsoft.Web/sites', parameters('FuncAppMachinesimulatorName'))]"
-          ],
-          "properties": {
-              "allow": true
-          }
-      },
-      {
-          "type": "Microsoft.Web/sites/basicPublishingCredentialsPolicies",
-          "apiVersion": "2021-02-01",
-          "name": "[concat(parameters('FuncAppMachinesimulatorName'), '/scm')]",
-          "location": "Germany West Central",
-          "dependsOn": [
-              "[resourceId('Microsoft.Web/sites', parameters('FuncAppMachinesimulatorName'))]"
-          ],
-          "properties": {
-              "allow": true
-          }
-      },
-      {
-          "type": "Microsoft.Web/sites/config",
-          "apiVersion": "2021-02-01",
-          "name": "[concat(parameters('FuncAppMachinesimulatorName'), '/web')]",
-          "location": "Germany West Central",
-          "dependsOn": [
-              "[resourceId('Microsoft.Web/sites', parameters('FuncAppMachinesimulatorName'))]"
-          ],
-          "properties": {
-              "numberOfWorkers": 1,
-              "defaultDocuments": [
-                  "index.html"
-              ],
-              "netFrameworkVersion": "v4.0",
-              "linuxFxVersion": "DOTNET|3.1",
-              "requestTracingEnabled": false,
-              "remoteDebuggingEnabled": false,
-              "remoteDebuggingVersion": "VS2022",
-              "httpLoggingEnabled": false,
-              "acrUseManagedIdentityCreds": false,
-              "logsDirectorySizeLimit": 35,
-              "detailedErrorLoggingEnabled": false,
-              "publishingUsername": "$func-machinesimulator-dev",
-              "scmType": "None",
-              "use32BitWorkerProcess": false,
-              "webSocketsEnabled": false,
-              "alwaysOn": false,
-              "managedPipelineMode": "Integrated",
-              "virtualApplications": [
-                  {
-                      "virtualPath": "/",
-                      "physicalPath": "site\\wwwroot",
-                      "preloadEnabled": false
-                  }
-              ],
-              "loadBalancing": "LeastRequests",
-              "experiments": {
-                  "rampUpRules": []
-              },
-              "autoHealEnabled": false,
-              "vnetRouteAllEnabled": false,
-              "vnetPrivatePortsCount": 0,
-              "localMySqlEnabled": false,
-              "ipSecurityRestrictions": [
-                  {
-                      "ipAddress": "Any",
-                      "action": "Allow",
-                      "priority": 1,
-                      "name": "Allow all",
-                      "description": "Allow all access"
-                  }
-              ],
-              "scmIpSecurityRestrictions": [
-                  {
-                      "ipAddress": "Any",
-                      "action": "Allow",
-                      "priority": 1,
-                      "name": "Allow all",
-                      "description": "Allow all access"
-                  }
-              ],
-              "scmIpSecurityRestrictionsUseMain": false,
-              "http20Enabled": false,
-              "minTlsVersion": "1.2",
-              "scmMinTlsVersion": "1.0",
-              "ftpsState": "AllAllowed",
-              "preWarmedInstanceCount": 0,
-              "functionAppScaleLimit": 0,
-              "functionsRuntimeScaleMonitoringEnabled": false,
-              "minimumElasticInstanceCount": 1,
-              "azureStorageAccounts": {}
-          }
-      },
-      {
-          "type": "Microsoft.Web/sites/deployments",
-          "apiVersion": "2021-02-01",
-          "name": "[concat(parameters('FuncAppMachinesimulatorName'), '/6a3070d59579479db12f8c31b3e8ee7b')]",
-          "location": "Germany West Central",
-          "dependsOn": [
-              "[resourceId('Microsoft.Web/sites', parameters('FuncAppMachinesimulatorName'))]"
-          ],
-          "properties": {
-              "status": 4,
-              "author_email": "N/A",
-              "author": "N/A",
-              "deployer": "Push-Deployer",
-              "message": "Created via a push deployment",
-              "start_time": "2021-10-06T10:13:48.7441169Z",
-              "end_time": "2021-10-06T10:13:49.6476915Z",
-              "active": true
-          }
-      },
-      {
-          "type": "Microsoft.Web/sites/functions",
-          "apiVersion": "2021-02-01",
-          "name": "[concat(parameters('FuncAppMachinesimulatorName'), '/MachineSimulatorData')]",
-          "location": "Germany West Central",
-          "dependsOn": [
-              "[resourceId('Microsoft.Web/sites', parameters('FuncAppMachinesimulatorName'))]"
-          ],
-          "properties": {
-              "config": {},
-              "language": "DotNetAssembly",
-              "isDisabled": false
-          }
-      },
-      {
-          "type": "Microsoft.Web/sites/hostNameBindings",
-          "apiVersion": "2021-02-01",
-          "name": "[concat(parameters('FuncAppMachinesimulatorName'), '/', parameters('FuncAppMachinesimulatorName'), '.azurewebsites.net')]",
-          "location": "Germany West Central",
-          "dependsOn": [
-              "[resourceId('Microsoft.Web/sites', parameters('FuncAppMachinesimulatorName'))]"
-          ],
-          "properties": {
-              "siteName": "[parameters('FuncAppMachinesimulatorName')]",
-              "hostNameType": "Verified"
-          }
+        ],
+        "serverFarmId": "[reference('linkedTemplateAppPlan').outputs.appplanid.value]",
+        "reserved": true,
+        "isXenon": false,
+        "hyperV": false,
+        "siteConfig": {
+          "numberOfWorkers": 1,
+          "linuxFxVersion": "DOTNET|3.1",
+          "acrUseManagedIdentityCreds": false,
+          "alwaysOn": false,
+          "http20Enabled": false,
+          "functionAppScaleLimit": 0,
+          "minimumElasticInstanceCount": 1
+        },
+        "scmSiteAlsoStopped": false,
+        "clientAffinityEnabled": false,
+        "clientCertEnabled": false,
+        "clientCertMode": "Required",
+        "hostNamesDisabled": false,
+        "containerSize": 1536,
+        "dailyMemoryTimeQuota": 0,
+        "httpsOnly": false,
+        "redundancyMode": "None",
+        "storageAccountRequired": false,
+        "keyVaultReferenceIdentity": "SystemAssigned"
       }
+    },
+    {
+      "type": "Microsoft.Web/sites/basicPublishingCredentialsPolicies",
+      "apiVersion": "2021-02-01",
+      "name": "[concat(parameters('FuncAppMachinesimulatorName'), '/ftp')]",
+      "location": "[parameters('location')]",
+      "dependsOn": [
+        "[resourceId('Microsoft.Web/sites', parameters('FuncAppMachinesimulatorName'))]"
+      ],
+      "properties": {
+        "allow": true
+      }
+    },
+    {
+      "type": "Microsoft.Web/sites/basicPublishingCredentialsPolicies",
+      "apiVersion": "2021-02-01",
+      "name": "[concat(parameters('FuncAppMachinesimulatorName'), '/scm')]",
+      "location": "[parameters('location')]",
+      "dependsOn": [
+        "[resourceId('Microsoft.Web/sites', parameters('FuncAppMachinesimulatorName'))]"
+      ],
+      "properties": {
+        "allow": true
+      }
+    },
+    {
+      "type": "Microsoft.Web/sites/config",
+      "apiVersion": "2021-02-01",
+      "name": "[concat(parameters('FuncAppMachinesimulatorName'), '/web')]",
+      "location": "[parameters('location')]",
+      "dependsOn": [
+        "[resourceId('Microsoft.Web/sites', parameters('FuncAppMachinesimulatorName'))]"
+      ],
+      "properties": {
+        "numberOfWorkers": 1,
+        "defaultDocuments": [
+          "index.html"
+        ],
+        "netFrameworkVersion": "v4.0",
+        "linuxFxVersion": "DOTNET|3.1",
+        "requestTracingEnabled": false,
+        "remoteDebuggingEnabled": false,
+        "remoteDebuggingVersion": "VS2022",
+        "httpLoggingEnabled": false,
+        "acrUseManagedIdentityCreds": false,
+        "logsDirectorySizeLimit": 35,
+        "detailedErrorLoggingEnabled": false,
+        "publishingUsername": "$func-machinesimulator-dev",
+        "scmType": "None",
+        "use32BitWorkerProcess": false,
+        "webSocketsEnabled": false,
+        "alwaysOn": false,
+        "managedPipelineMode": "Integrated",
+        "virtualApplications": [
+          {
+            "virtualPath": "/",
+            "physicalPath": "site\\wwwroot",
+            "preloadEnabled": false
+          }
+        ],
+        "loadBalancing": "LeastRequests",
+        "experiments": {
+          "rampUpRules": []
+        },
+        "autoHealEnabled": false,
+        "vnetRouteAllEnabled": false,
+        "vnetPrivatePortsCount": 0,
+        "localMySqlEnabled": false,
+        "ipSecurityRestrictions": [
+          {
+            "ipAddress": "Any",
+            "action": "Allow",
+            "priority": 1,
+            "name": "Allow all",
+            "description": "Allow all access"
+          }
+        ],
+        "scmIpSecurityRestrictions": [
+          {
+            "ipAddress": "Any",
+            "action": "Allow",
+            "priority": 1,
+            "name": "Allow all",
+            "description": "Allow all access"
+          }
+        ],
+        "scmIpSecurityRestrictionsUseMain": false,
+        "http20Enabled": false,
+        "minTlsVersion": "1.2",
+        "scmMinTlsVersion": "1.0",
+        "ftpsState": "AllAllowed",
+        "preWarmedInstanceCount": 0,
+        "functionAppScaleLimit": 0,
+        "functionsRuntimeScaleMonitoringEnabled": false,
+        "minimumElasticInstanceCount": 1,
+        "azureStorageAccounts": {}
+      }
+    },
+    {
+      "type": "Microsoft.Web/sites/deployments",
+      "apiVersion": "2021-02-01",
+      "name": "[concat(parameters('FuncAppMachinesimulatorName'), '/6a3070d59579479db12f8c31b3e8ee7b')]",
+      "location": "[parameters('location')]",
+      "dependsOn": [
+        "[resourceId('Microsoft.Web/sites', parameters('FuncAppMachinesimulatorName'))]"
+      ],
+      "properties": {
+        "status": 4,
+        "author_email": "N/A",
+        "author": "N/A",
+        "deployer": "Push-Deployer",
+        "message": "Created via a push deployment",
+        "start_time": "2021-10-06T10:13:48.7441169Z",
+        "end_time": "2021-10-06T10:13:49.6476915Z",
+        "active": true
+      }
+    },
+    {
+      "type": "Microsoft.Web/sites/functions",
+      "apiVersion": "2021-02-01",
+      "name": "[concat(parameters('FuncAppMachinesimulatorName'), '/MachineSimulatorData')]",
+      "location": "[parameters('location')]",
+      "dependsOn": [
+        "[resourceId('Microsoft.Web/sites', parameters('FuncAppMachinesimulatorName'))]"
+      ],
+      "properties": {
+        "config": {},
+        "language": "DotNetAssembly",
+        "isDisabled": false
+      }
+    },
+    {
+      "type": "Microsoft.Web/sites/hostNameBindings",
+      "apiVersion": "2021-02-01",
+      "name": "[concat(parameters('FuncAppMachinesimulatorName'), '/', parameters('FuncAppMachinesimulatorName'), '.azurewebsites.net')]",
+      "location": "[parameters('location')]",
+      "dependsOn": [
+        "[resourceId('Microsoft.Web/sites', parameters('FuncAppMachinesimulatorName'))]"
+      ],
+      "properties": {
+        "siteName": "[parameters('FuncAppMachinesimulatorName')]",
+        "hostNameType": "Verified"
+      }
+    }
   ]
 }
