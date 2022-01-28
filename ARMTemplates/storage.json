@@ -88,8 +88,7 @@
           "enabled": false
         },
         "containerDeleteRetentionPolicy": {
-          "enabled": true,
-          "days": 7
+          "enabled": false
         }
       }
     },
@@ -152,7 +151,7 @@
   "outputs": {
     "storageid": {
       "type": "string",
-      "value": "[resourceId('Microsoft.Storage/storageAccounts')]"
+      "value": "[resourceId('Microsoft.Storage/storageAccounts', parameters('storageAccountName'))]"
     }
   }
 }
